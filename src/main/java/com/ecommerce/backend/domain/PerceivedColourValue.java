@@ -13,7 +13,6 @@ import lombok.Setter;
 public class PerceivedColourValue {
 
     @Id
-    private Integer perceivedColourValueId;
-
+    private Character perceivedColourValueId;
     private String perceivedColourValueName;
 }

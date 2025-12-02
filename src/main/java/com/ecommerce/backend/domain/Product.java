@@ -43,7 +43,7 @@ public class Product {
     @JoinColumn(name = "graphical_appearance_no")
     private GraphicalAppearance graphicalAppearance;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "colour_group_code")
     private ColourGroup colourGroup;
 
@@ -59,7 +59,7 @@ public class Product {
     @JoinColumn(name = "garment_group_no")
     private GarmentGroup garmentGroup;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "department_no")
     private Department department;
 

@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class IndexGroup {
     @Id
-    private String indexCode;
+    private Integer indexCode;
     private Integer indexGroupNo;
     private String indexName;
     private String indexGroupName;
