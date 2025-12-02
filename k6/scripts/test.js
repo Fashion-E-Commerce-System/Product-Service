@@ -3,9 +3,9 @@ import { check, sleep } from 'k6';
 
 export let options = {
     stages: [
-        { duration: '10s', target: 30 },
-        { duration: '20s', target: 30 },
-        { duration: '10s', target: 0 },
+        { duration: '1s', target: 3 },
+        { duration: '2s', target: 3 },
+        { duration: '1s', target: 0 },
     ],
     thresholds: {
         'http_req_duration': ['p(95)<200'],
@@ -51,21 +51,22 @@ export default function () {
     };
 
     // 2. Create a new product
-    const productName = `Product-${__VU}-${__ITER}`;
+    const prodName = `ProdName-${__VU}-${__ITER}`;
     const createPayload = JSON.stringify({
-        name: productName,
-        productCode: `P-${__VU}-${__ITER}`,
-        prodName: `ProdName-${__VU}-${__ITER}`,
-        detailDesc: `Description for ${productName}`,
+        productCode: __VU, // Use VU number for unique product code
+        prodName: prodName,
+        detailDesc: `Description for ${prodName}`,
         productType: { productTypeNo: 1 },
         graphicalAppearance: { graphicalAppearanceNo: 1 },
         colourGroup: { colourGroupCode: 1 },
-        indexGroup: { indexCode: "A" },
+        perceivedColourValue: { perceivedColourValueId: 1 },
+        perceivedColourMaster: { perceivedColourMasterId: 1 },
+        department: { departmentNo: 1 },
+        index: { indexCode: 'A' },
+        indexGroup: { indexGroupNo: 1 },
         section: { sectionNo: 1 },
         garmentGroup: { garmentGroupNo: 101 },
-        department: { departmentNo: 1 },
-        perceivedColourMaster: { perceivedColourMasterId: 1 },
-        perceivedColourValue: { perceivedColourValueId: 1 }
+        productGroup: { productGroupName: "Accessories" }
     });
 
     const createRes = http.post('http://localhost:8084/products', createPayload, authHeaders);
@@ -73,10 +74,12 @@ export default function () {
     check(createRes, {
         'Product creation successful': (r) => r.status === 201,
     });
-    
+
     let productId;
     if (createRes.status === 201) {
-        productId = createRes.json('id');
+        // In Spring Data JPA, the returned object from save has the ID.
+        // Let's assume the response body is the created product.
+        productId = createRes.json('productId');
         console.log(`✅ Product created successfully: ${productId}`);
     } else {
         console.error(`❌ Product creation failed: ${createRes.status} ${createRes.body}`);
@@ -89,7 +92,7 @@ export default function () {
 
     check(readRes, {
         'Product read successful': (r) => r.status === 200,
-        'Product name is correct': (r) => r.json('name') === productName,
+        'Product name is correct': (r) => r.json('prodName') === prodName,
     });
 
     if (readRes.status === 200) {
@@ -100,27 +103,29 @@ export default function () {
     sleep(1);
 
     // 4. Update the product
-    const updatedProductName = `Updated-${productName}`;
+    const updatedProdName = `Updated-${prodName}`;
     const updatePayload = JSON.stringify({
-        name: updatedProductName,
-        productCode: `P-updated-${__VU}-${__ITER}`,
-        prodName: `ProdName-updated-${__VU}-${__ITER}`,
-        detailDesc: `Updated description for ${productName}`,
+        productCode: __VU + 1000, // new product code
+        prodName: updatedProdName,
+        detailDesc: `Updated description for ${prodName}`,
         productType: { productTypeNo: 1 },
         graphicalAppearance: { graphicalAppearanceNo: 1 },
         colourGroup: { colourGroupCode: 1 },
-        indexGroup: { indexCode: "A" },
-        section: { sectionNo: 1 },
-        garmentGroup: { garmentGroupNo: 101 },
-        department: { departmentNo: 1 },
+        perceivedColourValue: { perceivedColourValueId: 1 },
         perceivedColourMaster: { perceivedColourMasterId: 1 },
-        perceivedColourValue: { perceivedColourValueId: 1 }
+        department: { departmentNo: 1 },
+        index: { indexCode: 'B' },
+        indexGroup: { indexGroupNo: 2 },
+        section: { sectionNo: 2 },
+        garmentGroup: { garmentGroupNo: 102 },
+        productGroup: { productGroupName: "Garment" }
     });
 
     const updateRes = http.put(`http://localhost:8084/products/${productId}`, updatePayload, authHeaders);
 
     check(updateRes, {
         'Product update successful': (r) => r.status === 200,
+        'Updated product name is correct': (r) => r.json('prodName') === updatedProdName,
     });
 
     if (updateRes.status === 200) {
