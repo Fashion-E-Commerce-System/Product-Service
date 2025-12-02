@@ -6,18 +6,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-@Entity
-@Table(name = "index_groups")
 @Getter
 @Setter
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class IndexGroup {
-    @Id
-    @Column(name = "index_group_no")
-    private Integer indexGroupNo;
+@Table(name = "indexes")
+public class Index {
 
-    @Column(name = "index_group_name")
-    private String indexGroupName;
+    @Id
+    @Column(name = "index_code")
+    private Character indexCode;
+
+    @Column(name = "index_name")
+    private String indexName;
 }

@@ -9,20 +9,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-@Entity
-@Table(name = "departments")
 @Getter
 @Setter
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Department {
+@Table(name = "product_groups")
+public class ProductGroup {
 
     @Id
-    @Column(name = "department_no")
-    private Integer departmentNo;
-
-    @Column(name = "department_name")
-    private String departmentName;
-
+    @Column(name = "product_group_name")
+    private String productGroupName;
 }

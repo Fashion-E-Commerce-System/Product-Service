@@ -23,21 +23,25 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "product_id")
+    private Integer productId;
 
-    private String name;
+    @Column(name = "product_code")
+    private Integer productCode;
 
-    private String productCode;
-
-
+    @Column(name = "prod_name")
     private String prodName;
 
-    @Column(length = 2000)
+    @Column(name = "detail_desc", length = 800)
     private String detailDesc;
 
     @ManyToOne
     @JoinColumn(name = "product_type_no")
     private ProductType productType;
+
+    @ManyToOne
+    @JoinColumn(name = "product_group_name")
+    private ProductGroup productGroup;
 
     @ManyToOne
     @JoinColumn(name = "graphical_appearance_no")
@@ -48,7 +52,23 @@ public class Product {
     private ColourGroup colourGroup;
 
     @ManyToOne
+    @JoinColumn(name = "perceived_colour_value_id")
+    private PerceivedColourValue perceivedColourValue;
+
+    @ManyToOne
+    @JoinColumn(name = "perceived_colour_master_id")
+    private PerceivedColourMaster perceivedColourMaster;
+
+    @ManyToOne
+    @JoinColumn(name = "department_no")
+    private Department department;
+
+    @ManyToOne
     @JoinColumn(name = "index_code")
+    private Index index;
+
+    @ManyToOne
+    @JoinColumn(name = "index_group_no")
     private IndexGroup indexGroup;
 
     @ManyToOne
@@ -58,17 +78,4 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "garment_group_no")
     private GarmentGroup garmentGroup;
-
-    @ManyToOne
-    @JoinColumn(name = "department_no")
-    private Department department;
-
-    @ManyToOne
-    @JoinColumn(name = "perceived_colour_master_id")
-    private PerceivedColourMaster perceivedColourMaster;
-
-    @ManyToOne
-    @JoinColumn(name = "perceived_colour_value_id")
-    private PerceivedColourValue perceivedColourValue;
-
 }

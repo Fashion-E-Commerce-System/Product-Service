@@ -42,7 +42,7 @@ public class ProductService {
 
 
 
-    public Optional<Product> findById(Long id) {
+    public Optional<Product> findById(Integer id) {
 
         return productRepository.findById(id);
 
@@ -56,11 +56,11 @@ public class ProductService {
 
         Product savedProduct = productRepository.save(product);
 
-        String eventType = product.getId() == null ? "PRODUCT_CREATED" : "PRODUCT_UPDATED";
+        String eventType = product.getProductId() == null ? "PRODUCT_CREATED" : "PRODUCT_UPDATED";
 
-        ProductEvent productEvent = new ProductEvent(savedProduct.getId(), savedProduct.getName());
+        ProductEvent productEvent = new ProductEvent(savedProduct.getProductId(), savedProduct.getProdName());
 
-        outboxEventService.createOutboxEvent("product", savedProduct.getId().toString(), eventType, productEvent);
+        outboxEventService.createOutboxEvent("product", savedProduct.getProductId().toString(), eventType, productEvent);
 
         return savedProduct;
 
@@ -70,7 +70,7 @@ public class ProductService {
 
     @Transactional
 
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
 
         productRepository.deleteById(id);
 
