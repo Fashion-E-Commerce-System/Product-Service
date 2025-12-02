@@ -13,7 +13,56 @@ export let options = {
     },
 };
 
-export default function () {
+// Function to fetch a random item from an array
+function getRandomItem(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+}
+
+export function setup() {
+    // Fetch all the category data
+    const res = http.batch([
+        ['GET', 'http://localhost:8084/categories/product-types'],
+        ['GET', 'http://localhost:8084/categories/graphical-appearances'],
+        ['GET', 'http://localhost:8084/categories/colour-groups'],
+        ['GET', 'http://localhost:8084/categories/perceived-colour-values'],
+        ['GET', 'http://localhost:8084/categories/perceived-colour-masters'],
+        ['GET', 'http://localhost:8084/categories/departments'],
+        ['GET', 'http://localhost:8084/categories/indices'],
+        ['GET', 'http://localhost:8084/categories/index-groups'],
+        ['GET', 'http://localhost:8084/categories/sections'],
+        ['GET', 'http://localhost:8084/categories/garment-groups'],
+        ['GET', 'http://localhost:8084/categories/product-groups'],
+    ]);
+
+    const productTypes = res[0].json();
+    const graphicalAppearances = res[1].json();
+    const colourGroups = res[2].json();
+    const perceivedColourValues = res[3].json();
+    const perceivedColourMasters = res[4].json();
+    const departments = res[5].json();
+    const indices = res[6].json();
+    const indexGroups = res[7].json();
+    const sections = res[8].json();
+    const garmentGroups = res[9].json();
+    const productGroups = res[10].json();
+
+    return {
+        productTypes,
+        graphicalAppearances,
+        colourGroups,
+        perceivedColourValues,
+        perceivedColourMasters,
+        departments,
+        indices,
+        indexGroups,
+        sections,
+        garmentGroups,
+        productGroups
+    };
+}
+
+
+export default function (data) {
     const username = 'root';
     const password = 'root';
 
@@ -56,17 +105,17 @@ export default function () {
         productCode: __VU, // Use VU number for unique product code
         prodName: prodName,
         detailDesc: `Description for ${prodName}`,
-        productType: { productTypeNo: 1 },
-        graphicalAppearance: { graphicalAppearanceNo: 1 },
-        colourGroup: { colourGroupCode: 1 },
-        perceivedColourValue: { perceivedColourValueId: 1 },
-        perceivedColourMaster: { perceivedColourMasterId: 1 },
-        department: { departmentNo: 1 },
-        index: { indexCode: 'A' },
-        indexGroup: { indexGroupNo: 1 },
-        section: { sectionNo: 1 },
-        garmentGroup: { garmentGroupNo: 101 },
-        productGroup: { productGroupName: "Accessories" }
+        productType: getRandomItem(data.productTypes),
+        graphicalAppearance: getRandomItem(data.graphicalAppearances),
+        colourGroup: getRandomItem(data.colourGroups),
+        perceivedColourValue: getRandomItem(data.perceivedColourValues),
+        perceivedColourMaster: getRandomItem(data.perceivedColourMasters),
+        department: getRandomItem(data.departments),
+        index: getRandomItem(data.indices),
+        indexGroup: getRandomItem(data.indexGroups),
+        section: getRandomItem(data.sections),
+        garmentGroup: getRandomItem(data.garmentGroups),
+        productGroup: getRandomItem(data.productGroups)
     });
 
     const createRes = http.post('http://localhost:8084/products', createPayload, authHeaders);
@@ -108,17 +157,17 @@ export default function () {
         productCode: __VU + 1000, // new product code
         prodName: updatedProdName,
         detailDesc: `Updated description for ${prodName}`,
-        productType: { productTypeNo: 1 },
-        graphicalAppearance: { graphicalAppearanceNo: 1 },
-        colourGroup: { colourGroupCode: 1 },
-        perceivedColourValue: { perceivedColourValueId: 1 },
-        perceivedColourMaster: { perceivedColourMasterId: 1 },
-        department: { departmentNo: 1 },
-        index: { indexCode: 'B' },
-        indexGroup: { indexGroupNo: 2 },
-        section: { sectionNo: 2 },
-        garmentGroup: { garmentGroupNo: 102 },
-        productGroup: { productGroupName: "Garment" }
+        productType: getRandomItem(data.productTypes),
+        graphicalAppearance: getRandomItem(data.graphicalAppearances),
+        colourGroup: getRandomItem(data.colourGroups),
+        perceivedColourValue: getRandomItem(data.perceivedColourValues),
+        perceivedColourMaster: getRandomItem(data.perceivedColourMasters),
+        department: getRandomItem(data.departments),
+        index: getRandomItem(data.indices),
+        indexGroup: getRandomItem(data.indexGroups),
+        section: getRandomItem(data.sections),
+        garmentGroup: getRandomItem(data.garmentGroups),
+        productGroup: getRandomItem(data.productGroups)
     });
 
     const updateRes = http.put(`http://localhost:8084/products/${productId}`, updatePayload, authHeaders);
