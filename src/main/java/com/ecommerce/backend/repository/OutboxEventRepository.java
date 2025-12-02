@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface OutboxEventRepository extends JpaRepository<OutboxEvent, Long> {
 
-    List<OutboxEvent> findAllByProcessedAtIsNull();
+    List<OutboxEvent> findAllByProcessedAtIsNullOrderByCreatedAtAsc();
 }
